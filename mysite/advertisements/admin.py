@@ -4,5 +4,24 @@ from .models import Advertisement
 
 @admin.register(Advertisement)
 class AdvertisementAdmin(admin.ModelAdmin):
-    pass
+    list_display = ['id', 'title', 'price', 'created_date', 'auction']
+    list_filter = ['auction', 'created_at']
+    actions = ["mark_action_as_true", "mark_action_as_false"]
+    fieldsets = (
+        ('Общее', {
+            'fields': ('title', 'description'),
+            'classes': ['collapse']
+        }),
+        ('Финансы', {
+            'fields': ('price', 'auction'),
+            'classes': ['collapse']
+        })
+    )
+    search_fields = ("title",)
+    @admin.action(description="Добавить возможность торга")
+    def mark_action_as_true(self, request, queryset):
+        queryset.update(auction=True)
 
+    @admin.action(description="Убрать возможность торга")
+    def mark_action_as_false(self, request, queryset):
+        queryset.update(auction=False)
