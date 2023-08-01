@@ -18,6 +18,7 @@ class AdvertisementAdmin(admin.ModelAdmin):
         })
     )
     search_fields = ("title",)
+
     @admin.action(description="Добавить возможность торга")
     def mark_action_as_true(self, request, queryset):
         queryset.update(auction=True)
